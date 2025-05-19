@@ -4,6 +4,7 @@ import org.springframework.stereotype.Component
 import java.util.concurrent.atomic.AtomicLong
 
 private const val COUNTER_INITIAL_VALUE = 2L
+private const val SHORT_CODE_RADIX = 36
 
 @Component
 class UniqueUrlCounter {
@@ -16,9 +17,11 @@ class UniqueUrlCounter {
      */
     private val counter = AtomicLong(COUNTER_INITIAL_VALUE)
 
-    fun next(): Long {
+    fun next(): String {
         val count = counter.getAndIncrement()
-        return modExp(count)
+        val nonSequentialLookingCount = modExp(count)
+        val stringifiedCount = nonSequentialLookingCount.toString(SHORT_CODE_RADIX)
+        return stringifiedCount
     }
 
     private fun modExp(base: Long, exponent: Long = 65537L, modulus: Long = 32749L): Long {

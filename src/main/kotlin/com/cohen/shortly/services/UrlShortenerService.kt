@@ -10,8 +10,6 @@ import com.cohen.shortly.exceptions.InvalidUrlException
 import com.cohen.shortly.exceptions.ShortUrlNotFoundException
 import com.cohen.shortly.models.ShortUrl
 
-private const val SHORT_CODE_RADIX = 36
-
 @Service
 class UrlShortenerService(
     private val repo: ShortUrlRepository,
@@ -23,7 +21,7 @@ class UrlShortenerService(
             throw InvalidUrlException("Invalid URL: $originalUrl")
         }
 
-        val shortCode = counter.next().toString(SHORT_CODE_RADIX)
+        val shortCode = counter.next()
         val shortUrl = ShortUrl(shortCode, originalUrl)
 
         repo.save(shortUrl)
