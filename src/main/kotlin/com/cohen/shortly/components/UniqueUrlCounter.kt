@@ -5,6 +5,10 @@ import java.util.concurrent.atomic.AtomicLong
 
 private const val COUNTER_INITIAL_VALUE = 2L
 private const val SHORT_CODE_RADIX = 36
+private const val EXPONENT = 65537L
+
+// XXX: This is the number of unique codes we can generate before it loops
+private const val MODULUS = 104729L
 
 @Component
 class UniqueUrlCounter {
@@ -24,16 +28,16 @@ class UniqueUrlCounter {
         return stringifiedCount
     }
 
-    private fun modExp(base: Long, exponent: Long = 65537L, modulus: Long = 32749L): Long {
+    private fun modExp(base: Long): Long {
         var result = 1L
-        var currentBase = base % modulus
-        var currentExponent = exponent
+        var currentBase = base % MODULUS
+        var currentExponent = EXPONENT
 
         while (currentExponent > 0) {
             if (currentExponent and 1L == 1L) {
-                result = (result * currentBase) % modulus
+                result = (result * currentBase) % MODULUS
             }
-            currentBase = (currentBase * currentBase) % modulus
+            currentBase = (currentBase * currentBase) % MODULUS
             currentExponent = currentExponent shr 1
         }
 

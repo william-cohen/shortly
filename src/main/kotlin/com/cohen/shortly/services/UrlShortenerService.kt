@@ -16,7 +16,7 @@ class UrlShortenerService(
     private val counter: UniqueUrlCounter
 ) {
     @Throws(InvalidUrlException::class)
-    fun shortenUrl(originalUrl: String): String {
+    fun shortenUrl(originalUrl: String): ShortUrl {
         if (!isValid(originalUrl)) {
             throw InvalidUrlException("Invalid URL: $originalUrl")
         }
@@ -26,16 +26,16 @@ class UrlShortenerService(
 
         repo.save(shortUrl)
 
-        return shortCode
+        return shortUrl
     }
 
-    fun getOriginalUrl(code: String): String {
+    fun getShortUrl(code: String): ShortUrl {
         val shortUrl = repo.findByShortCode(code)
         if (shortUrl == null) {
             throw ShortUrlNotFoundException("Short URL not found: $code")
         }
 
-        return shortUrl.originalUrl
+        return shortUrl
     }
 
     private fun isValid(url: String): Boolean {
