@@ -8,6 +8,7 @@ private const val SHORT_CODE_RADIX = 36
 private const val EXPONENT = 65537L
 
 // XXX: This is the number of unique codes we can generate before it loops
+// This number also needs to be prime
 private const val MODULUS = 104729L
 
 @Component

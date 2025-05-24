@@ -87,4 +87,19 @@ class ShortlyApplicationTests {
 		assertEquals(HttpStatus.FOUND, redirectResponse.statusCode)
 		assertEquals("https://redirect.to", redirectResponse.headers.location.toString())
 	}
+
+	@Test
+	fun `Assert returns the same code twice for the same URL`() {
+		val request = mapOf("url" to "https://redirect.to")
+		val headers = HttpHeaders().apply { contentType = MediaType.APPLICATION_JSON }
+		val entity = HttpEntity(request, headers)
+
+		val shortUrlResponse = restTemplate.postForEntity("/api/urls", entity, ShortUrl::class.java)
+		val shortCode1 = shortUrlResponse.body?.shortCode ?: fail("Missing short code")
+
+		val shortUrlResponse2 = restTemplate.postForEntity("/api/urls", entity, ShortUrl::class.java)
+		val shortCode2 = shortUrlResponse2.body?.shortCode ?: fail("Missing short code")
+
+		assertEquals(shortCode1, shortCode2)
+	}
 }

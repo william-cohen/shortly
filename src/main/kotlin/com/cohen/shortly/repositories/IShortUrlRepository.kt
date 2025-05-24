@@ -9,6 +9,8 @@ interface IShortUrlRepository {
 
     fun findByShortCode(code: String): ShortUrl?
 
+    fun findByOriginalUrl(url: String): ShortUrl?
+
     fun existsByShortCode(code: String): Boolean
 
     fun deleteByShortCode(code: String)

@@ -21,6 +21,11 @@ class UrlShortenerService(
             throw InvalidUrlException("Invalid URL: $originalUrl")
         }
 
+        val existingShortUrl = repo.findByOriginalUrl(originalUrl)
+        if (existingShortUrl != null) {
+            return existingShortUrl
+        }
+
         val shortCode = counter.next()
         val shortUrl = ShortUrl(shortCode, originalUrl)
 
